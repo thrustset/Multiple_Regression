@@ -1,6 +1,7 @@
 #include <iostream>
+#include "matrix.hpp"
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
+auto main() -> int {
+    auto a = Matrix();
     return 0;
 }
