@@ -6,24 +6,20 @@ Matrix::Matrix() :
     value{nullptr}
 {}
 
-Matrix::Matrix(int numOfRows, int numOfColumns) :
+Matrix::Matrix(int numOfRows, int numOfColumns, double **value) :
     numOfRows{numOfRows},
     numOfColumns{numOfColumns},
     value{new double*[numOfRows]}
 {
-    for(int i = 0; i < numOfRows; i++)
-        this->value[i] = new double[numOfColumns];
-}
-
-Matrix::Matrix(int numOfRows, int numOfColumns, const double **value) :
-    numOfRows{numOfRows},
-    numOfColumns{numOfColumns},
-    value{new double*[numOfRows]}
-{
-    for(int i = 0; i < numOfRows; i++) {
-        this->value[i] = new double[numOfColumns];
-        for(int j = 0; j < numOfColumns; j++)
-            this->value[i][j] = value[i][j];
+    if(value != nullptr) {
+        for (int i = 0; i < numOfRows; i++) {
+            this->value[i] = new double[numOfColumns];
+            for (int j = 0; j < numOfColumns; j++)
+                this->value[i][j] = value[i][j];
+        }
+    } else {
+        for (int i = 0; i < numOfRows; i++)
+            this->value[i] = new double[numOfColumns];
     }
 }
 
@@ -36,18 +32,6 @@ Matrix::Matrix(Matrix const &source) :
         this->value[i] = new double[numOfColumns];
         for(int j = 0; j < numOfColumns; j++)
             this->value[i][j] = source.value[i][j];
-    }
-}
-
-Matrix::Matrix(SymMatrix &source) :
-    numOfRows{source.getSize()},
-    numOfColumns{source.getSize()},
-    value{new double*[numOfRows]}
-{
-    for(int i = 0; i < numOfRows; i++) {
-        this->value[i] = new double[numOfColumns];
-        for(int j = 0; j < numOfColumns; j++)
-            this->value[i][j] = source.getValue(i, j);
     }
 }
 
@@ -97,20 +81,33 @@ auto Matrix::operator*(Matrix const &source) const -> Matrix {
             for(int j = 0; j < product.numOfColumns; j++) {
                 sum = 0;
                 for(int k = 0; k < numOfColumns; k++)
-                    sum += value[i][k] * source.value[k][i];
+                    sum += value[i][k] * source.value[k][j];
                 product.setValue(i, j, sum);
             }
         }
         return product;
-    } else {
-        std::cout << "Error!\nThe matrices are not available for multiplication!\n";
-        return *this;
     }
+    std::cout << "Error!\n";
+    std::cout << "The matrices are not available for multiplication!\n";
+    return *this;
+}
+
+auto Matrix::isSquare() const -> bool {
+    if(numOfRows == numOfColumns)
+        return true;
+    return false;
 }
 
 auto Matrix::isSymmetrical() const -> bool {
-    if(numOfRows == numOfColumns)
+    if(isSquare()) {
+        for(int i = 0; i < numOfRows; i++) {
+            for(int j = i + 1; j < numOfColumns; j++) {
+                if(value[i][j] != value[j][i])
+                    return false;
+            }
+        }
         return true;
+    }
     return false;
 }
 
@@ -129,12 +126,28 @@ auto Matrix::getNumOfColumns() const -> int {
     return numOfColumns;
 }
 
+auto Matrix::getValue() const -> double ** {
+    return value;
+}
+
+auto Matrix::getValue(int i) const -> double* {
+    return value[i];
+}
+
 auto Matrix::getValue(int i, int j) const -> double {
     return value[i][j];
 }
 
-auto Matrix::setValue(int i, int j, double newValue) -> void {
-    value[i][j] = newValue;
+auto Matrix::setNumOfRows(int set) -> void {
+    numOfRows = set;
+}
+
+auto Matrix::setNumOfColumns(int set) -> void {
+    numOfColumns = set;
+}
+
+auto Matrix::setValue(int i, int j, double set) -> void {
+    value[i][j] = set;
 }
 
 auto isAvailableMultiply(Matrix const &matrix1, Matrix const &matrix2) -> bool {

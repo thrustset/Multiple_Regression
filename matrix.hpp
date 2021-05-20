@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include "sym_matrix.hpp"
 
 class Matrix {
 private:
@@ -9,10 +8,8 @@ private:
     double **value;
 public:
     Matrix();
-    Matrix(int numOfRows, int numOfColumns);
-    Matrix(int numOfRows, int numOfColumns, double const **value);
+    Matrix(int numOfRows, int numOfColumns, double **value = nullptr);
     Matrix(Matrix const &source);
-    explicit Matrix(SymMatrix &source);
     ~Matrix();
 
     auto friend operator<<(std::ostream &os, Matrix const &matrix) -> std::ostream &;
@@ -20,13 +17,20 @@ public:
     auto operator=(Matrix const &source) -> Matrix &;
     auto operator*(Matrix const &source) const -> Matrix;
 
+    [[nodiscard]] auto isSquare() const -> bool;
     [[nodiscard]] auto isSymmetrical() const -> bool;
+
     [[nodiscard]] auto getSize() const -> int;
     [[nodiscard]] auto getNumOfRows() const -> int;
     [[nodiscard]] auto getNumOfColumns() const -> int;
 
+    [[nodiscard]] auto getValue() const -> double **;
+    [[nodiscard]] auto getValue(int i) const -> double *;
     [[nodiscard]] auto getValue(int i, int j) const -> double;
-    auto setValue(int i, int j, double newValue) -> void;
+
+    auto setNumOfRows(int set) -> void;
+    auto setNumOfColumns(int set) -> void;
+    auto setValue(int i, int j, double set) -> void;
 };
 
 auto isAvailableMultiply(Matrix const &matrix1, Matrix const &matrix2) -> bool;

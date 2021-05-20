@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include "matrix.hpp"
 
 class SymMatrix {
 private:
@@ -11,7 +10,6 @@ public:
     explicit SymMatrix(int size);
     SymMatrix(int size, double const *value);
     SymMatrix(SymMatrix const &matrix);
-    SymMatrix(Matrix const &matrix);
     ~SymMatrix();
 
     auto friend operator<<(std::ostream &os, SymMatrix const &matrix) -> std::ostream &;
@@ -23,6 +21,4 @@ public:
     [[nodiscard]] auto getSize() const -> int;
     [[nodiscard]] auto getValue(int i, int j) const -> double;
     auto setValue(int i, int j, double set) -> void;
-
-    auto determinant() -> double;
 };

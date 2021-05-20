@@ -26,14 +26,6 @@ SymMatrix::SymMatrix(SymMatrix const &matrix) :
         this->value[i] = matrix.value[i];
 }
 
-/*
-SymMatrix::SymMatrix(const Matrix &matrix) :
-
-{
-
-}
-*/
-
 SymMatrix::~SymMatrix() {
     delete [] value;
 }
@@ -103,27 +95,17 @@ auto SymMatrix::getSize() const -> int {
 }
 
 auto SymMatrix::getValue(int i, int j) const -> double {
-    if(i <= j)
-        return value[i * (size - 1) - i * (i - 1) / 2 + j];
+    if(i < 0 || i >= size || j < 0 || j >= size)
+        return 0;
+    if(i >= j)
+        return value[i + j * (size - 1) - j * (j - 1) / 2];
     return getValue(j, i);
 }
 
 auto SymMatrix::setValue(int i, int j, double set) -> void {
-    if(i <= j) {
-        value[i * (size - 1) - i * (i - 1) / 2 + j] = set;
+    if(i >= j) {
+        value[i + j * (size - 1) - j * (j - 1) / 2] = set;
     } else {
         setValue(j, i, set);
     }
 }
-
-/*
-auto SymMatrix::determinant() -> double {
-    double det = 0;
-
-    auto perm = Permutation(size);
-    auto *count = new int[size];
-
-
-    return det;
-}
- */
