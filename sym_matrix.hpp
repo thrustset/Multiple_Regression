@@ -18,7 +18,7 @@ public:
     auto operator+(SymMatrix const &source) const -> SymMatrix;
     auto operator*(SymMatrix const &source) const -> SymMatrix;
 
-    [[nodiscard]] auto getSize() const -> int;
-    [[nodiscard]] auto getValue(int i, int j) const -> double;
+    auto getSize() const -> int;
+    auto getValue(int i, int j) const -> double;
     auto setValue(int i, int j, double set) -> void;
 };

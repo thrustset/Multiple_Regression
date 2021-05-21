@@ -42,9 +42,8 @@ Matrix::~Matrix() {
 }
 
 auto operator<<(std::ostream &os, Matrix const &matrix) -> std::ostream & {
-    os << "Matrix:\n";
-    os << "\tnumOfRows = " << matrix.numOfRows << "\n";
-    os << "\tnumOfColumns = " << matrix.numOfColumns << "\n";
+    os << "Matrix\t";
+    os << "[" << matrix.numOfRows << "x" << matrix.numOfColumns << "]\n";
 
     for(int i = 0; i < matrix.numOfRows; i++) {
         for(int j = 0; j < matrix.numOfColumns; j++) {
@@ -90,6 +89,28 @@ auto Matrix::operator*(Matrix const &source) const -> Matrix {
     std::cout << "Error!\n";
     std::cout << "The matrices are not available for multiplication!\n";
     return *this;
+}
+
+auto Matrix::operator*(FVector array) const -> Matrix {
+    auto product = Matrix(numOfRows, 1);
+    for(int i = 0; i < numOfRows; i++) {
+        auto sum = 0.0;
+        for(int k = 0; k < numOfColumns; k++)
+            sum += array.at(k)(value[i][k]);
+        product.setValue(i, 0, sum);
+    }
+    return product;
+}
+
+auto Matrix::operator|(FVector array) const -> Matrix {
+    auto result = Matrix(numOfRows, numOfColumns + 1);
+    for(int i = 0; i < numOfRows; i++) {
+        result.setValue(i, 0, 1);
+        for(int j = 0; j < numOfColumns; j++) {
+            result.setValue(i, j + 1, array.at(j)(value[i][j]));
+        }
+    }
+    return result;
 }
 
 auto Matrix::isSquare() const -> bool {

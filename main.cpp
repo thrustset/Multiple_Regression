@@ -1,23 +1,57 @@
 #include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <functional>
 #include <cmath>
+
 #include "sym_matrix.hpp"
 #include "matrix.hpp"
 #include "functions.hpp"
 
 auto main() -> int {
-    int size = 3;
+    std::ifstream file;
+    file.open("../input.txt");
+    if(!file) {
+        std::cout << "Check file's path!\n";
+        std::cout << "The program is finished!\n";
+        return 0;
+    }
 
-    auto *value = new double[size * (size + 1) / 2];
-    value[0] = 6.25;
-    value[1] = -1.0;
-    value[2] = 0.50;
-    value[3] = 5.00;
-    value[4] = 2.12;
-    value[5] = 3.60;
+    int numOfMeasure;
+    int dim;
+    file >> dim >> numOfMeasure;
 
-    auto symMatrix1 = SymMatrix(size, value);
-    std::cout << symMatrix1;
-    std::cout << cholesky(symMatrix1);
+    if(dim != 3) {
+        std::cout << "dimension != 3\n";
+        std::cout << "The program is finished!\n";
+        return 0;
+    }
+
+    auto X = Matrix(numOfMeasure, dim);
+    auto Y = Matrix(numOfMeasure, 1);
+    for(int i = 0; i < numOfMeasure; i++) {
+        double value;
+        for(int j = 0; j < dim; j++) {
+            file >> value;
+            X.setValue(i, j, value);
+        }
+        file >> value;
+        Y.setValue(i, 0, value);
+    }
+
+    auto funcArray = FVector();
+    funcArray.emplace_back(exp);
+    funcArray.emplace_back(sin);
+    funcArray.emplace_back(cos);
+
+    auto F = X | funcArray;
+    std::cout << std::setprecision(2) << F;
+
+    auto D = transpose(F) * F;
+    std::cout << std::setprecision(4) << D;
+
+    auto D_new = transform(D);
+    std::cout << std::setprecision(4) << cholesky(D_new);
 
     return 0;
 }

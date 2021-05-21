@@ -31,8 +31,8 @@ SymMatrix::~SymMatrix() {
 }
 
 auto operator<<(std::ostream &os, SymMatrix const &matrix) -> std::ostream & {
-    os << "SymMatrix:\n";
-    os << "\tsize = " << matrix.size << "\n";
+    os << "SymMatrix\t";
+    os << "[" << matrix.size << "x" << matrix.size << "]\n";
 
     for(int i = 0; i < matrix.size; i++) {
         os << "\t";

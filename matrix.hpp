@@ -1,5 +1,8 @@
 #pragma once
 #include <iostream>
+#include <functional>
+
+using FVector = std::vector<std::function<double(double)>>;
 
 class Matrix {
 private:
@@ -17,16 +20,19 @@ public:
     auto operator=(Matrix const &source) -> Matrix &;
     auto operator*(Matrix const &source) const -> Matrix;
 
-    [[nodiscard]] auto isSquare() const -> bool;
-    [[nodiscard]] auto isSymmetrical() const -> bool;
+    auto operator*(FVector array) const -> Matrix;
+    auto operator|(FVector array) const -> Matrix;
 
-    [[nodiscard]] auto getSize() const -> int;
-    [[nodiscard]] auto getNumOfRows() const -> int;
-    [[nodiscard]] auto getNumOfColumns() const -> int;
+    auto isSquare() const -> bool;
+    auto isSymmetrical() const -> bool;
 
-    [[nodiscard]] auto getValue() const -> double **;
-    [[nodiscard]] auto getValue(int i) const -> double *;
-    [[nodiscard]] auto getValue(int i, int j) const -> double;
+    auto getSize() const -> int;
+    auto getNumOfRows() const -> int;
+    auto getNumOfColumns() const -> int;
+
+    auto getValue() const -> double **;
+    auto getValue(int i) const -> double *;
+    auto getValue(int i, int j) const -> double;
 
     auto setNumOfRows(int set) -> void;
     auto setNumOfColumns(int set) -> void;

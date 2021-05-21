@@ -66,24 +66,12 @@ auto cholesky(SymMatrix const &symMatrix) -> Matrix {
     return matrix;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+auto unityMatrix(int size) -> SymMatrix {
+    auto unity = SymMatrix(size);
+    for(int i = 0; i < size; i++) {
+        unity.setValue(i, i, 1);
+        for(int j = i + 1; j < size; j++)
+            unity.setValue(i, j, 0);
+    }
+    return unity;
+}
